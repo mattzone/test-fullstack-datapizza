@@ -1,0 +1,85 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribuzione di pacchetti
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+*.egg-info/
+.pytest_cache/
+
+# Cython debug output
+cython_debug/
+
+# Distribuzione di pacchetti su Windows
+*.log
+
+# PyInstaller
+#  Aggiungi anche i file .dll, .so e .dylib relativi al tuo ambiente
+*.manifest
+*.spec
+
+# Unit test / coverage rapporti
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+# Unit test logs
+test-output.log
+
+# La directory dell'ambiente virtuale
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Jupyter notebook
+.ipynb_checkpoints
+
+# PyCharm
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+
+# Pip file
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Pycharm
+# User-specific stuff:
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+# Sensitive or high-churn files:
+.idea/**/modules.xml
+.idea/**/targetFolderProfiles.xml
+# Gradle:
+.idea/**/gradle.xml
+.idea/**/libraries
+# Mongo Explorer plugin:
+.idea/**/mongoSettings.xml
+# File-based project format:
+*.iws
+# IntelliJ
+out/
