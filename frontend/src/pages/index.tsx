@@ -1,12 +1,8 @@
+import { Document } from "@/interfaces/document";
 import { useState } from "react";
 import { FaRegFileAlt, FaRegPaperPlane } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
 import { TypeAnimation } from "react-type-animation";
-
-type Document = {
-  title: string;
-  content: string;
-};
 
 export default function Home() {
   const [query, setQuery] = useState("");
@@ -60,42 +56,39 @@ export default function Home() {
     <div className="h-screen flex justify-evenly flex-col">
       <div className="h-5/6 flex text-white">
         {query ? (
-          <div className="sm:w-2/3 sm:p-0 xl:w-2xl sm:mx-auto sm:text-base text-sm font-medium max-h-full overflow-auto overflow-x-hidden w-full">
-            <div className="px-5 pt-20">
-              <div className="flex justify-end">
-                <div className="bg-teal-900 rounded-3xl px-5 py-3 break-words sm:max-w-2/3 max-w-3/4">
-                  {query}
-                </div>
-              </div>
-
-              <div className="w-fit py-10">
-                {response && (
-                  <div className="">
-                    <TypeAnimation
-                      sequence={[response, 1000]}
-                      speed={85}
-                      wrapper="span"
-                      cursor={false}
-                    />
-                    {/* <div className="flex justify-end"> */}
-                    <div
-                      onClick={fetchDocuments}
-                      className="bg-teal-500 text-teal-950 p-2 rounded-full hover:bg-teal-800 cursor-pointer hover:text-teal-500 items-center justify-center flex text-sm w-fit mt-5"
-                    >
-                      <FaRegFileAlt />
-                    </div>
-                    {/* </div> */}
+          <div className="pb-5 pt-10 w-full">
+            <div className="sm:w-2/3 sm:p-0 xl:w-2xl sm:mx-auto sm:text-base text-sm font-medium max-h-full overflow-auto overflow-x-hidden w-full">
+              <div className="pr-5">
+                <div className="flex justify-end">
+                  <div className="bg-teal-900 rounded-3xl px-5 py-3 break-words sm:max-w-2/3 max-w-3/4">
+                    {query}
                   </div>
-                )}
+                </div>
+
+                <div className="w-fit py-10">
+                  {response && (
+                    <div className="">
+                      <TypeAnimation
+                        sequence={[response, 1000]}
+                        speed={85}
+                        wrapper="span"
+                        cursor={false}
+                      />
+                      <div
+                        onClick={fetchDocuments}
+                        className="bg-teal-500 text-teal-950 p-2 rounded-full hover:bg-teal-800 cursor-pointer hover:text-teal-500 items-center justify-center flex text-sm w-fit mt-5"
+                      >
+                        <FaRegFileAlt />
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
         ) : (
-          <div className="px-10 sm:w-2/3 sm:p-0 xl:w-2xl sm:mx-auto md:text-4xl font-light text-center pt-10 h-full">
-            <div className="font-extrabold md:text-5xl text-2xl">
-              Test tecnico Full Stack Developer
-            </div>
-            <div className="flex items-center justify-center h-full">
+          <div className="sm:w-2/3 px-10 sm:px-0 sm:pt-0 xl:w-2xl sm:mx-auto md:text-4xl pt-10 max-h-full">
+            <div className="flex items-center h-full font-light">
               <p>
                 <span className="font-bold">Benvenuto!</span> Come posso
                 aiutarti?
