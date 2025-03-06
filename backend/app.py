@@ -28,11 +28,11 @@ def post_generate():
         Generate a response based on the given query.
 
         This function handles POST requests to the '/generate' endpoint. It retrieves
-        a query from the request body, checks if a response for the query exists in
-        the cache, and returns the cached response if available. If not, it generates
-        a new response using lorem text, stores it in the cache, and returns it.
+        a query from the request body, checks if a answer for the query exists in
+        the cache, and returns the cached answer if available. If not, it generates
+        a new answer using lorem text, stores it in the cache, and returns it.
 
-        Returns a dictionary containing the generated response under the 'response' key.
+        Returns a dictionary containing the generated answer under the 'response' key.
     """
 
     query = request.json['query']  # retrieve the query
