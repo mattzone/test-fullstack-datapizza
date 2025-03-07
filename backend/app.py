@@ -18,8 +18,8 @@ def get_documents():
 
     return {
         'documents': [
-            {"title": "Doc 1", "content": "Questo è l'inizio di un paragrafo..."},
-            {"title": "Doc 2", "content": "Questo è l'inizio di un altro paragrafo..."}
+            {"title": "Document 1", "content": "Blanditiis fuga deleniti rem nemo rerum sed omnis recusandae perspiciatis, enim eos distinctio eveniet optio cumque ducimus voluptate quod sit."},
+            {"title": "Document 2", "content": "Enim quidem doloribus voluptates doloremque, assumenda quo voluptatum, sit sapiente obcaecati deleniti."}
         ]
     }
 
