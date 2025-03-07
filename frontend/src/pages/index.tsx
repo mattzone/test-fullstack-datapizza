@@ -1,22 +1,37 @@
 import { Document } from "@/interfaces/document";
-import { useState } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
 import { FaRegFileAlt, FaRegPaperPlane } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
-import { TypeAnimation } from "react-type-animation";
 
 export default function Home() {
   const [query, setQuery] = useState("");
   const [text, setText] = useState("");
-  const [response, setResponse] = useState("");
+  const [answer, setAnswer] = useState("");
   const [documents, setDocuments] = useState<Array<Document>>([]);
   const [showModal, setShowModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [showWelcome, setShowWelcome] = useState(true);
+  const [showBtnDoc, setShowBtnDoc] = useState(false);
+  const containerRef = useRef(null);
+  const textareaRef = useRef(null);
+
+  // Effetto per fare lo scroll dinamico man mano che il div si riempie
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    }
+  }, [text]); // Lo scroll viene aggiornato quando il testo cambia
 
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
 
   async function sendQuery() {
-    setResponse("");
+    setShowWelcome(false);
     setText("");
+    setIsLoading(true);
+    setAnswer("");
+    setShowBtnDoc(false);
+    setQuery(text);
 
     await fetch("http://127.0.0.1:5000/generate", {
       method: "post",
@@ -27,9 +42,22 @@ export default function Home() {
     })
       .then((res) => {
         res.json().then((json) => {
-          setResponse(json["response"]);
-          setQuery(text);
           setText("");
+          setIsLoading(false);
+
+          let response = json["response"];
+          let index = -1;
+
+          const interval = setInterval(() => {
+            if (index < response.length - 1) {
+              setAnswer((prev) => prev + response[index]);
+
+              index++;
+            } else {
+              setShowBtnDoc(true);
+              clearInterval(interval);
+            }
+          }, 10);
         });
       })
       .catch((error) => {
@@ -52,66 +80,102 @@ export default function Home() {
       });
   }
 
-  return (
-    <div className="h-screen flex justify-evenly flex-col">
-      <div className="h-5/6 flex text-white">
-        {query ? (
-          <div className="pb-5 pt-10 w-full">
-            <div className="sm:w-2/3 sm:p-0 xl:w-2xl sm:mx-auto sm:text-base text-sm font-medium max-h-full overflow-auto overflow-x-hidden w-full">
-              <div className="pr-5">
-                <div className="flex justify-end">
-                  <div className="bg-teal-900 rounded-3xl px-5 py-3 break-words sm:max-w-2/3 max-w-3/4">
-                    {query}
-                  </div>
-                </div>
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = "auto";
 
-                <div className="w-fit py-10">
-                  {response && (
-                    <div className="">
-                      <TypeAnimation
-                        sequence={[response, 1000]}
-                        speed={85}
-                        wrapper="span"
-                        cursor={false}
-                      />
-                      <div
-                        onClick={fetchDocuments}
-                        className="bg-teal-500 text-teal-950 p-2 rounded-full hover:bg-teal-800 cursor-pointer hover:text-teal-500 items-center justify-center flex text-sm w-fit mt-5"
-                      >
-                        <FaRegFileAlt />
-                      </div>
-                    </div>
-                  )}
+      const lineHeight = parseInt(
+        window.getComputedStyle(textarea).lineHeight,
+        10
+      );
+      const padding =
+        parseInt(window.getComputedStyle(textarea).paddingTop, 10) +
+        parseInt(window.getComputedStyle(textarea).paddingBottom, 10);
+
+      // Calcola l'altezza basata sul numero di righe e il padding
+      let height = Math.max(
+        textarea.scrollHeight,
+        textarea.clientHeight,
+        lineHeight + padding
+      );
+
+      if (!text) height = 36;
+
+      textarea.style.height = `${height}px`;
+    }
+  }, [text]);
+
+  return (
+    <div className="flex flex-col h-screen max-h-screen bg-teal-950 xl:pb-30 md:pb-28 pb-20">
+      {/* navabr */}
+      <div className="w-full text-slate-400 ">
+        <div className="sm:w-2/3 w-5/6  xl:w-2xl mx-auto font-extrabold flex py-3 sm:text-2xl text-sm">
+          Test tecnico Full Stack Developer
+        </div>
+      </div>
+      {/* navbar */}
+
+      {!showWelcome ? (
+        // chat
+        <div
+          className="w-full text-slate-300 md:text-xl/9 text-sm/6 xl:pt-20 md:pt-10 pt-5 max-h-full h-full overflow-auto scroll-smooth"
+          ref={containerRef}
+        >
+          <div className="w-full">
+            <div className=" sm:w-2/3 w-5/6 xl:w-2xl mx-auto">
+              <div className="flex justify-end">
+                <div className="bg-teal-900 rounded-3xl px-5 py-4 break-words sm:max-w-2/3 max-w-3/4 md:text-lg/7 text-xs/5">
+                  {query}
                 </div>
               </div>
-            </div>
-          </div>
-        ) : (
-          <div className="sm:w-2/3 px-10 sm:px-0 sm:pt-0 xl:w-2xl sm:mx-auto md:text-4xl pt-10 max-h-full">
-            <div className="flex items-center h-full font-light">
-              <p>
-                <span className="font-bold">Benvenuto!</span> Come posso
-                aiutarti?
-              </p>
-            </div>
-          </div>
-        )}
-      </div>
 
-      <div className="px-10 sm:w-2/3 sm:p-0 xl:w-2xl sm:mx-auto">
-        <div className="flex sm:px-5 sm:py-3 px-2 py-1.5 rounded-full bg-teal-900 sm:text-base text-sm">
-          <input
-            type="text"
-            className="w-full rounded-full px-2 py-1 sm:px-4 sm:py-2 bg-teal-950 border-0 text-white"
+              {answer && !isLoading ? (
+                <div className="pt-5">
+                  {answer}
+                  {/* { && ( */}
+                  <div
+                    onClick={fetchDocuments}
+                    className={`${
+                      showBtnDoc ? "opacity-100" : "opacity-0"
+                    } duration-500 transition-all bg-teal-500 text-teal-950 p-2 rounded-full hover:bg-teal-800 cursor-pointer hover:text-teal-500 items-center justify-center flex text-sm w-fit mt-5`}
+                  >
+                    <FaRegFileAlt />
+                  </div>
+                  {/* ) */}
+                  {/* } */}
+                </div>
+              ) : (
+                <div className="flex justify-center items-center pt-60 w-full">
+                  <div className="w-16 h-16 border-5 border-teal-800 border-t-transparent rounded-full animate-spin"></div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div> // chat
+      ) : (
+        <div className="flex items-center justify-center h-full text-slate-400 sm:px-0 px-10">
+          <p className="sm:text-4xl text-lg">
+            <span className="font-bold">Benvenuto!</span> Come posso aiutarti?
+          </p>
+        </div>
+      )}
+
+      {/* input */}
+      <div className="sm:w-2/3 w-5/6 xl:w-2xl mx-auto fixed left-0 right-0 py-5 bottom-0 h-fit">
+        <div className="flex sm:px-5 sm:py-5 px-2 py-1.5 rounded-4xl bg-teal-900 sm:text-base text-sm h-fit items-center">
+          <textarea
+            className="w-full text-slate-400 px-5 resize-none py-1.5 max-h-72 outline-0 h-auto"
             placeholder="Inserisci la domanda qui..."
             onChange={(e) => setText(e.target.value)}
             value={text}
+            ref={textareaRef}
             onKeyDown={(e) => {
-              if (e.key === "Enter") sendQuery();
+              // if (e.key === "Enter") sendQuery();
             }}
           />
           <button
-            className={`sm:ml-3 ml-2 bg-teal-500 text-teal-950 sm:px-8 px-1.5 rounded-full items-center justify-center flex ${
+            className={`sm:ml-3 ml-2 bg-teal-500 text-teal-950 sm:px-8 p-3 rounded-full items-center justify-center flex ${
               text
                 ? "hover:bg-teal-950 cursor-pointer hover:text-teal-800"
                 : "opacity-30"
@@ -123,6 +187,7 @@ export default function Home() {
           </button>
         </div>
       </div>
+      {/* input */}
 
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 px-20">
@@ -131,7 +196,7 @@ export default function Home() {
             onClick={closeModal}
           />
 
-          <div className="flex flex-col gap-6 bg-teal-800 text-white p-10 rounded-4xl shadow-lg z-50 relative max-h-5/6 overflow-auto">
+          <div className="flex flex-col gap-6 bg-teal-800 text-slate-400 p-10 rounded-4xl shadow-lg z-50 relative max-h-5/6 overflow-auto">
             {documents.map(function (object) {
               return (
                 <div key={object.title} className="text-lg border-b pb-3">
