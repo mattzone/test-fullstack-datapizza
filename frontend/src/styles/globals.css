@@ -19,3 +19,7 @@
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(18, 164, 149, 0.63);
 }
+
+.toast-error-container {
+  @apply bg-teal-800 text-white;
+}
