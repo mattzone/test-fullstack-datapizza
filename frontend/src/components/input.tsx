@@ -17,8 +17,7 @@ const Input = ({
   finishPrint: boolean;
 }) => {
   const [disableSend, setDisableSend] = useState(true);
-
-  const textareaRef = useRef(null);
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
     const textarea = textareaRef.current;

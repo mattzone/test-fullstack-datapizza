@@ -23,7 +23,7 @@ const Chat = ({
   const [answer, setAnswer] = useState("");
   const [documents, setDocuments] = useState<Array<Document>>([]);
   const [showBtnDoc, setShowBtnDoc] = useState(false);
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const [showModal, setShowModal] = useState(false);
 
   function openModal() {
@@ -65,7 +65,7 @@ const Chat = ({
   }, [answer, query]);
 
   async function fetchDocuments() {
-    await fetch("http://127.0.0.1:5000/documents")
+    await fetch("http://localhost:5000/documents")
       .then((res) => {
         res.json().then((json) => {
           setDocuments(json["documents"]);

@@ -44,7 +44,7 @@ export default function Home() {
     setIsLoading(true);
     setQuery(text);
 
-    await fetch("http://127.0.0.1:5000/generate", {
+    await fetch("http://localhost:5000/generate", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
