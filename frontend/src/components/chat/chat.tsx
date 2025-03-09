@@ -65,7 +65,7 @@ const Chat = ({
   }, [answer, query]);
 
   async function fetchDocuments() {
-    await fetch("http://localhost:5000/documents")
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/documents`)
       .then((res) => {
         res.json().then((json) => {
           setDocuments(json["documents"]);

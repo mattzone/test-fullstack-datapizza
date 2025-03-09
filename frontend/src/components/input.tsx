@@ -53,9 +53,9 @@ const Input = ({
       className="sm:w-2/3 w-5/6 xl:w-2xl mx-auto fixed left-0 right-0 py-5 bottom-0 h-fit"
       ref={containerRef}
     >
-      <div className="flex sm:px-5 sm:py-5 px-2 py-1.5 rounded-3xl bg-teal-900 sm:text-base text-sm h-fit items-center">
+      <div className="flex sm:px-5 sm:py-5 rounded-3xl bg-teal-900 sm:text-base text-sm items-center">
         <textarea
-          className="w-full text-slate-400 px-5 resize-none py-1.5 max-h-72 outline-0 h-auto bg-teal-950 rounded-l-3xl"
+          className="w-full text-slate-400 px-5 resize-none max-h-72 outline-0 pt-1.5"
           placeholder="Inserisci la domanda qui..."
           onChange={(e) => {
             setText(e.target.value);

@@ -44,7 +44,7 @@ export default function Home() {
     setIsLoading(true);
     setQuery(text);
 
-    await fetch("http://localhost:5000/generate", {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/generate`, {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
