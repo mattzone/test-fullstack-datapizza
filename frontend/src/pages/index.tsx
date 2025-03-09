@@ -4,39 +4,26 @@ import Input from "@/components/input";
 import Navbar from "@/components/navbar";
 import Welcome from "@/components/welcome";
 import { History } from "@/interfaces/history";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 
 export default function Home() {
   const [query, setQuery] = useState("");
   const [text, setText] = useState("");
   const [response, setResponse] = useState("");
-  const [height, setHeight] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [showWelcome, setShowWelcome] = useState(true);
   const [finishPrint, setFinishPrint] = useState(true);
   const [isFirst, setIsFirst] = useState(true);
   const [history, setHistory] = useState<Array<History>>([]);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [clientWidth, setClientWidth] = useState(0);
-  const [clientHeight, setClientHeight] = useState(0);
+  const [height, setHeight] = useState(0);
 
-  useEffect(() => {
-    const handleResize = () => {
-      setClientWidth(window.innerWidth);
-      setClientHeight(window.innerHeight);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  useEffect(() => {
-    setHeightForPadding();
-  }, [clientWidth, clientHeight]);
-
+  /**
+   * sendQuery
+   *
+   * Sends a query to the server that generate a response.
+   */
   async function sendQuery() {
     setQuery("");
     setResponse("");
@@ -55,12 +42,15 @@ export default function Home() {
         res.json().then((json) => {
           setIsLoading(false);
 
+          // save the response
           let response = json["response"];
           setResponse(response);
           setText("");
 
+          // isFirst is used to avoid adding the firstquery and the response to the history
           if (isFirst) setIsFirst(false);
           else {
+            // if is not the first query Add the query and the response to the history
             let newHistory = history;
             newHistory.push({
               query: query,
@@ -72,28 +62,32 @@ export default function Home() {
         });
       })
       .catch((error) => {
+        // print the error in a toast
         showError(
           "Errore durante la generazione della risposta. Riprova più tardi."
         );
       });
   }
 
-  useEffect(() => {
-    setHeightForPadding();
-  }, [text]);
-
-  function setHeightForPadding() {
-    setHeight(0);
-    const container = containerRef.current;
-    if (container) setHeight(container.clientHeight);
-  }
-
+  /**
+   * showError
+   *
+   * Shows an error in a toast.
+   * @param {string} error The error to show.
+   */
   const showError = (error: string) => {
     toast.error(error, {
       className: "toast-error-container",
     });
   };
 
+  /**
+   * CloseButton
+   *
+   * A function that return React component that is used to close a toast.
+   * @param {{ closeToast: () => void }} props The props of the component.
+   * @returns {CloseBtn} The component.
+   */
   const CloseButton = ({ closeToast }: { closeToast: () => void }) => (
     <CloseBtn closeToast={closeToast} />
   );
@@ -105,6 +99,7 @@ export default function Home() {
     >
       <Navbar />
 
+      {/* when you enter in the page show welcome, insted of the chat */}
       {!showWelcome ? (
         <Chat
           query={query}
@@ -120,6 +115,7 @@ export default function Home() {
       <Input
         text={text}
         setText={setText}
+        setHeight={setHeight}
         sendQuery={sendQuery}
         containerRef={containerRef}
         finishPrint={finishPrint}

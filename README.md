@@ -21,7 +21,7 @@ docker-compose up --build
 
 ### 3 Accesso al sito
 
-Il sito è disponibile all'indirizzo: [http://localhost:3000](http://localhost:3000)
+Il sito sarà disponibile all'indirizzo: [http://localhost:3000](http://localhost:3000)
 
 ## Authors
 
